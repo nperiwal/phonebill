@@ -25,14 +25,6 @@ public enum Demo {
         };
     }
 
-    public static int[] tab3() {
-        return new int[] {
-                R.string.demo_tab_8,
-                R.string.demo_tab_9,
-                R.string.demo_tab_10
-        };
-    }
-
     public void startActivity(Context context) {
         DemoActivity.startActivity(context, this);
     }
