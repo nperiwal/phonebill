@@ -10,7 +10,7 @@
         android:label="@string/title_activity_demo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".DemoActivity">
+        <activity android:name=".PhoneBillActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

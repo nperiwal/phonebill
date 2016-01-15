@@ -1,0 +1,5 @@
+<com.example.oozie.phonebill3.SmartTabLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/viewpagertab"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/tab_height"/>

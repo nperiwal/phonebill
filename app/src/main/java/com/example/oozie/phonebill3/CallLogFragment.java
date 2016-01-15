@@ -9,23 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class DemoFragment extends Fragment {
+public class CallLogFragment extends Fragment {
 
-    private String TAG = "DemoFragment";
+    private String TAG = "CallLogFragment";
     private String CALL_TEXT = "callText";
 
     private TextView textView;
     private String callText;
-
-    boolean visitFlag3 = false;
-
-    public TextView getTextView() {
-        return textView;
-    }
-
-    public void setCallText(String callText) {
-        this.callText = callText;
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -38,7 +28,7 @@ public class DemoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         Log.v(TAG, "In frag's on create view");
-        return inflater.inflate(R.layout.fragment_demo, container, false);
+        return inflater.inflate(R.layout.fragment_call_log, container, false);
     }
 
     @Override
@@ -49,7 +39,7 @@ public class DemoFragment extends Fragment {
         System.out.println("Tab Position: " + String.valueOf(position));
         textView = (TextView) view.findViewById(R.id.call_log_text);
         if (position == 1) {
-            DemoActivity activity = (DemoActivity) getActivity();
+            PhoneBillActivity activity = (PhoneBillActivity) getActivity();
             callText = activity.getCallText();
             textView = (TextView) view.findViewById(R.id.call_log_text);
             textView.setText(callText);

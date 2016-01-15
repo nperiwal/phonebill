@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import java.util.Date;
 
 
-public class DemoActivity extends AppCompatActivity {
+public class PhoneBillActivity extends AppCompatActivity {
 
     private String callText;
 
@@ -26,7 +26,7 @@ public class DemoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_demo);
+        setContentView(R.layout.activity_phone_bill);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.demo_title_basic);
@@ -34,7 +34,7 @@ public class DemoActivity extends AppCompatActivity {
         callText = getCallDetails();
 
         ViewGroup tab = (ViewGroup) findViewById(R.id.tab);
-        tab.addView(LayoutInflater.from(this).inflate(R.layout.demo_basic, tab, false));
+        tab.addView(LayoutInflater.from(this).inflate(R.layout.tab_smart, tab, false));
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
@@ -42,7 +42,7 @@ public class DemoActivity extends AppCompatActivity {
 
         FragmentPagerItems pages = new FragmentPagerItems(this);
         for (int titleResId : tabs()) {
-            pages.add(FragmentPagerItem.of(getString(titleResId), DemoFragment.class));
+            pages.add(FragmentPagerItem.of(getString(titleResId), CallLogFragment.class));
         }
 
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
@@ -57,16 +57,15 @@ public class DemoActivity extends AppCompatActivity {
         //Do nothing.
     }
 
-    private static int[] tab3() {
+    private static int[] tab2() {
         return new int[]{
-                //R.string.tab_1,
                 R.string.tab_2,
                 R.string.tab_3
         };
     }
 
     private int[] tabs() {
-        return tab3();
+        return tab2();
     }
 
     private String getCallDetails() {
