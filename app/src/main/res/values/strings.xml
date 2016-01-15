@@ -10,12 +10,9 @@
     <string name="demo_title_basic">PhoneBill Optimizer</string>
 
 
-    <string name="demo_tab_5">Gingerbread</string>
-    <string name="demo_tab_6">Honeycomb</string>
-    <string name="demo_tab_7">Ice Cream Sandwich</string>
-    <string name="demo_tab_8">Jelly Bean</string>
-    <string name="demo_tab_9">KitKat</string>
-    <string name="demo_tab_10">Lollipop</string>
+    <string name="tab_1">Classify Contact</string>
+    <string name="tab_2">Get Notification</string>
+    <string name="tab_3">Call Log</string>
 
     <string name="demo_tab_no_title">No Title</string>
     <string name="demo_tab_like_a_medium_top">Top</string>
