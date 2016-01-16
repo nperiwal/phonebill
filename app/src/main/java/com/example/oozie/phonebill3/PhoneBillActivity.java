@@ -41,8 +41,14 @@ public class PhoneBillActivity extends AppCompatActivity {
         setup(viewPagerTab);
 
         FragmentPagerItems pages = new FragmentPagerItems(this);
-        for (int titleResId : tabs()) {
-            pages.add(FragmentPagerItem.of(getString(titleResId), CallLogFragment.class));
+        for (int tabId : tabs()) {
+            String tabName = getString(tabId);
+            if (tabName.equals(getString(R.string.tab_2))) {
+                pages.add(FragmentPagerItem.of(tabName, GetNotificationFragment.class));
+            }
+            else if (tabName.equals(getString(R.string.tab_3))) {
+                pages.add(FragmentPagerItem.of(tabName, CallLogFragment.class));
+            }
         }
 
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(

@@ -1,0 +1,116 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <TextView
+        android:id="@+id/outgoing_call_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="false"
+        android:text="Outgoing Call Duration(mins)"
+        android:layout_marginTop="14dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginLeft="10dp"
+        />
+
+    <EditText
+        android:id="@+id/outgoing_call_edittext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/outgoing_call_text"
+        android:layout_toRightOf="@+id/outgoing_call_text"
+        android:layout_marginLeft="10dp"
+        />
+
+    <TextView
+        android:id="@+id/rangeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/outgoing_call_text"
+        android:layout_marginTop="20dp"
+        android:layout_alignLeft="@+id/outgoing_call_text"
+
+        android:text="Range :"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/fromText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rangeText"
+        android:layout_marginTop="20dp"
+        android:layout_alignLeft="@+id/outgoing_call_text"
+
+        android:text="From :"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        />
+
+    <EditText
+        android:id="@+id/etFromDate"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/fromText"
+        android:layout_toRightOf="@+id/fromText"
+        android:layout_marginLeft="10dp"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/fromText"
+        android:layout_toRightOf="@+id/etFromDate"
+        android:layout_marginLeft="10dp"
+
+        android:text="From Date"
+
+        />
+
+    <TextView
+        android:id="@+id/toText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fromText"
+        android:layout_marginTop="25dp"
+        android:layout_alignLeft="@+id/outgoing_call_text"
+
+        android:text="To :"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        />
+
+    <EditText
+        android:id="@+id/etToDate"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/toText"
+        android:layout_toRightOf="@+id/toText"
+        android:layout_alignLeft="@+id/etFromDate"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/toText"
+        android:layout_toRightOf="@+id/etToDate"
+        android:layout_alignLeft="@+id/button1"
+
+        android:text="To Date"
+        />
+
+    <CheckBox
+        android:id="@+id/notification_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_alignParentLeft="false"
+        android:layout_below="@+id/toText"
+        android:layout_centerInParent="true"
+        android:text="Get Notification"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+</RelativeLayout>
