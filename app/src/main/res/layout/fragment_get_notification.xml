@@ -21,6 +21,7 @@
         android:layout_alignTop="@+id/outgoing_call_text"
         android:layout_toRightOf="@+id/outgoing_call_text"
         android:layout_marginLeft="10dp"
+        android:inputType="number"
         />
 
     <TextView
@@ -54,7 +55,8 @@
         android:layout_toRightOf="@+id/fromText"
         android:layout_marginLeft="10dp"
         android:text=""
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        />
 
 
     <Button

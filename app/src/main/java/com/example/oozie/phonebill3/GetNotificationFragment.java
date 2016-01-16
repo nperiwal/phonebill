@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
@@ -28,10 +30,12 @@ public class GetNotificationFragment extends Fragment {
     private int toMonth;
     private int toDay;
 
+    private EditText etCallDurationLimit;
     private Button fromDateButton;
     private EditText etFromText;
     private Button toDateButton;
     private EditText etToText;
+    private CheckBox checkBox;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -45,13 +49,37 @@ public class GetNotificationFragment extends Fragment {
         Log.v(TAG, "In GetNotificationFragment on view created");
         super.onViewCreated(view, savedInstanceState);
 
+        etCallDurationLimit = (EditText) view.findViewById(R.id.outgoing_call_edittext);
         fromDateButton = (Button) view.findViewById(R.id.button1);
         etFromText = (EditText) view.findViewById(R.id.etFromDate);
+        etFromText.setEnabled(false);
         toDateButton = (Button) view.findViewById(R.id.button2);
         etToText = (EditText) view.findViewById(R.id.etToDate);
+        etToText.setEnabled(false);
+        checkBox = (CheckBox) view.findViewById(R.id.notification_checkbox);
 
         addListenerOnFromButton();
         addListenerOnToButton();
+        addListenerOnCheckBox();
+    }
+
+    private void addListenerOnCheckBox() {
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+             @Override
+             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                 if (isChecked) {
+                     Log.v(TAG, "Get Notification ON");
+                     String duration = etCallDurationLimit.getText().toString();
+                     String fromDate = etFromText.getText().toString();
+                     String toDate = etToText.getText().toString();
+                     Log.v(TAG, "Duration " + duration);
+                     Log.v(TAG, "FromDate " + fromDate);
+                     Log.v(TAG, "ToDate " + toDate);
+                 } else {
+                     Log.v(TAG, "Get Notification OFF");
+                 }
+             }
+        });
     }
 
     private void addListenerOnFromButton() {
