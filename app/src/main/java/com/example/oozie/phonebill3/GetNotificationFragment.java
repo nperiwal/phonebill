@@ -1,7 +1,12 @@
 package com.example.oozie.phonebill3;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,14 +19,18 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.TimeZone;
 
 public class GetNotificationFragment extends Fragment {
 
     private String TAG = "GetNotificationFragment";
     static final int FROM_DATE_DIALOG_ID = 1;
     static final int TO_DATE_DIALOG_ID = 2;
+
+    private PendingIntent pendingIntent;
 
     private int fromYear;
     private int fromMonth;
@@ -75,11 +84,36 @@ public class GetNotificationFragment extends Fragment {
                      Log.v(TAG, "Duration " + duration);
                      Log.v(TAG, "FromDate " + fromDate);
                      Log.v(TAG, "ToDate " + toDate);
+                     start();
+                     Toast.makeText(getActivity(), "Get Notification Turned ON",
+                             Toast.LENGTH_SHORT).show();
+
                  } else {
                      Log.v(TAG, "Get Notification OFF");
+                     stop();
+                     Toast.makeText(getActivity(), "Get Notification Turned OFF",
+                             Toast.LENGTH_SHORT).show();
                  }
              }
         });
+    }
+
+    private void start() {
+        Intent intent = new Intent(this.getActivity(), MyAlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(this.getActivity(), MyAlarmReceiver.REQUEST_CODE,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+
+        int interval = 1000 * 10 * 1;
+        long firstMillis = System.currentTimeMillis();
+
+        manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis, interval, pendingIntent);
+    }
+
+    private void stop() {
+        AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        manager.cancel(pendingIntent);
     }
 
     private void addListenerOnFromButton() {

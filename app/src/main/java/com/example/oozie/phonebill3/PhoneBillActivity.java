@@ -66,7 +66,7 @@ public class PhoneBillActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         viewPagerTab.setViewPager(viewPager);
 
-        handleNotification();
+        //handleNotification();
     }
 
     private void handleNotification() {
