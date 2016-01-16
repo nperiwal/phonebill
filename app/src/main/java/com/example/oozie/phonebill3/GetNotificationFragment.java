@@ -6,19 +6,22 @@ import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -30,14 +33,14 @@ public class GetNotificationFragment extends Fragment {
     static final int FROM_DATE_DIALOG_ID = 1;
     static final int TO_DATE_DIALOG_ID = 2;
 
+    private SharedPreferences sharedPref;
+
     private PendingIntent pendingIntent;
 
-    private int fromYear;
-    private int fromMonth;
-    private int fromDay;
-    private int toYear;
-    private int toMonth;
-    private int toDay;
+    private String isGetNotificatonOn;
+    private String callDuration;
+    private String fromDate;
+    private String toDate;
 
     private EditText etCallDurationLimit;
     private Button fromDateButton;
@@ -67,35 +70,120 @@ public class GetNotificationFragment extends Fragment {
         etToText.setEnabled(false);
         checkBox = (CheckBox) view.findViewById(R.id.notification_checkbox);
 
+        Context context = getActivity();
+        sharedPref = context.getSharedPreferences(getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE);
+
+        checkForNotificationData();
+
         addListenerOnFromButton();
         addListenerOnToButton();
         addListenerOnCheckBox();
     }
 
+    private void storeData(String key, String value) {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(key, value);
+        editor.apply();
+    }
+
+    private void storeNotificationData () {
+        storeData("callDuration", callDuration);
+        storeData("fromDate", fromDate);
+        storeData("toDate", toDate);
+        storeData("isGetNotificatonOn", isGetNotificatonOn);
+
+    }
+
+    private void checkForNotificationData() {
+        String tempDuration = sharedPref.getString("callDuration", null);
+        String tempFromDate = sharedPref.getString("fromDate", null);
+        String tempToDate = sharedPref.getString("toDate", null);
+        String tempIsGetNotificatonOn = sharedPref.getString("isGetNotificatonOn", null);
+        if (tempDuration != null) {
+            etCallDurationLimit.setText(tempDuration);
+        }
+        if (tempFromDate != null) {
+            etFromText.setText(tempFromDate);
+        }
+        if (tempToDate != null) {
+            etToText.setText(tempToDate);
+        }
+        if (tempIsGetNotificatonOn != null) {
+            if (tempIsGetNotificatonOn.equals("true")) {
+                checkBox.setChecked(true);
+                fromDateButton.setEnabled(false);
+                toDateButton.setEnabled(false);
+                etCallDurationLimit.setEnabled(false);
+            }
+        }
+    }
+
     private void addListenerOnCheckBox() {
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-             @Override
-             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
-                 if (isChecked) {
-                     Log.v(TAG, "Get Notification ON");
-                     String duration = etCallDurationLimit.getText().toString();
-                     String fromDate = etFromText.getText().toString();
-                     String toDate = etToText.getText().toString();
-                     Log.v(TAG, "Duration " + duration);
-                     Log.v(TAG, "FromDate " + fromDate);
-                     Log.v(TAG, "ToDate " + toDate);
-                     start();
-                     Toast.makeText(getActivity(), "Get Notification Turned ON",
-                             Toast.LENGTH_SHORT).show();
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    Log.v(TAG, "Trying to check GetNotification");
 
-                 } else {
-                     Log.v(TAG, "Get Notification OFF");
-                     stop();
-                     Toast.makeText(getActivity(), "Get Notification Turned OFF",
-                             Toast.LENGTH_SHORT).show();
-                 }
-             }
+                    if( !checkConditionMet() ) {
+                        checkBox.setChecked(false);
+                        return;
+                    }
+                    start();
+                    isGetNotificatonOn = "true";
+                    Toast.makeText(getActivity(), "Get Notification Turned ON",
+                            Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Log.v(TAG, "Get Notification OFF");
+
+                    fromDateButton.setEnabled(true);
+                    toDateButton.setEnabled(true);
+                    etCallDurationLimit.setEnabled(true);
+
+                    stop();
+                    isGetNotificatonOn = "false";
+                    Toast.makeText(getActivity(), "Get Notification Turned OFF",
+                            Toast.LENGTH_SHORT).show();
+                }
+                storeNotificationData();
+            }
         });
+    }
+
+    private boolean checkConditionMet() {
+        //ToDo Date Validation Check
+
+        String tempDuration = etCallDurationLimit.getText().toString();
+        String tempFromDate = etFromText.getText().toString();
+        String tempToDate = etToText.getText().toString();
+
+        Log.v(TAG, "Duration " + tempDuration);
+        Log.v(TAG, "FromDate " + tempFromDate);
+        Log.v(TAG, "ToDate " + tempToDate);
+
+        if (tempDuration.isEmpty()) {
+            Toast.makeText(getActivity(), "Call Duration is not set", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (tempFromDate.isEmpty()) {
+            Toast.makeText(getActivity(), "From Date is not set", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (tempToDate.isEmpty()) {
+            Toast.makeText(getActivity(), "To Date is not set", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        callDuration = tempDuration;
+        fromDate = tempFromDate;
+        toDate = tempToDate;
+
+        fromDateButton.setEnabled(false);
+        toDateButton.setEnabled(false);
+        etCallDurationLimit.setEnabled(false);
+
+        return true;
     }
 
     private void start() {
@@ -105,7 +193,7 @@ public class GetNotificationFragment extends Fragment {
 
         AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 
-        int interval = 1000 * 10 * 1;
+        int interval = 1000 * 60 * 10;
         long firstMillis = System.currentTimeMillis();
 
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis, interval, pendingIntent);
@@ -150,11 +238,9 @@ public class GetNotificationFragment extends Fragment {
         switch (id) {
             case FROM_DATE_DIALOG_ID:
                 // set date picker as current date
-                return new DatePickerDialog(getActivity(), fromDatePickerListener, fromYear,
-                        fromMonth, fromDay);
+                return new DatePickerDialog(getActivity(), fromDatePickerListener, 2016, 1, 1);
             case TO_DATE_DIALOG_ID:
-                return new DatePickerDialog(getActivity(), toDatePickerListener, toYear, toMonth,
-                        toDay);
+                return new DatePickerDialog(getActivity(), toDatePickerListener, 2016, 1, 1);
 
         }
         return null;
@@ -166,16 +252,14 @@ public class GetNotificationFragment extends Fragment {
         // when dialog box is closed, below method will be called.
         public void onDateSet(DatePicker view, int selectedYear,
                               int selectedMonth, int selectedDay) {
-            fromYear = selectedYear;
-            fromMonth = selectedMonth;
-            fromDay = selectedDay;
+            StringBuilder builder = new StringBuilder();
+            builder.append(selectedMonth + 1).append("-").append(selectedDay).append("-")
+                    .append(selectedYear);
+
+            fromDate = builder.toString();
 
             // set selected date into textview
-            etFromText.setText(new StringBuilder().append(fromMonth + 1)
-                    .append("-").append(fromDay).append("-").append(fromYear)
-                    .append(" "));
-
-
+            etFromText.setText(fromDate);
         }
     };
 
@@ -185,16 +269,14 @@ public class GetNotificationFragment extends Fragment {
         // when dialog box is closed, below method will be called.
         public void onDateSet(DatePicker view, int selectedYear,
                               int selectedMonth, int selectedDay) {
-            toYear = selectedYear;
-            toMonth = selectedMonth;
-            toDay = selectedDay;
+
+            StringBuilder builder = new StringBuilder();
+            builder.append(selectedMonth + 1).append("-").append(selectedDay).append("-")
+                    .append(selectedYear);
+            toDate = builder.toString();
 
             // set selected date into textview
-            etToText.setText(new StringBuilder().append(toMonth + 1)
-                    .append("-").append(toDay).append("-").append(toYear)
-                    .append(" "));
-
-
+            etToText.setText(toDate);
         }
     };
 

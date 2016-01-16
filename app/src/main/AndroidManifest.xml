@@ -27,11 +27,11 @@
             android:exported="false">
         </service>
 
-        <receiver android:name=".OutgoingReceiver" >
+        <!--<receiver android:name=".OutgoingReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
             </intent-filter>
-        </receiver>
+        </receiver>-->
 
         <receiver
             android:name=".MyAlarmReceiver"
