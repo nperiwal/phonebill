@@ -49,7 +49,7 @@
 
     <EditText
         android:id="@+id/etFromDate"
-        android:layout_width="120dp"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/fromText"
         android:layout_toRightOf="@+id/fromText"
@@ -65,10 +65,8 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/fromText"
         android:layout_toRightOf="@+id/etFromDate"
-        android:layout_marginLeft="10dp"
-
-        android:text="From Date"
-
+        android:background="@android:color/transparent"
+        android:drawableTop="@drawable/calendar_icon"
         />
 
     <TextView
@@ -85,7 +83,7 @@
 
     <EditText
         android:id="@+id/etToDate"
-        android:layout_width="120dp"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/toText"
         android:layout_toRightOf="@+id/toText"
@@ -100,8 +98,8 @@
         android:layout_alignTop="@+id/toText"
         android:layout_toRightOf="@+id/etToDate"
         android:layout_alignLeft="@+id/button1"
-
-        android:text="To Date"
+        android:background="@android:color/transparent"
+        android:drawableTop="@drawable/calendar_icon"
         />
 
     <CheckBox
