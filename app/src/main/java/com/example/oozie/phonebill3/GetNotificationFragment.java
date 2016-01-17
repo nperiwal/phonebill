@@ -65,10 +65,10 @@ public class GetNotificationFragment extends Fragment {
         etCallDurationLimit = (EditText) view.findViewById(R.id.outgoing_call_edittext);
         fromDateButton = (Button) view.findViewById(R.id.button1);
         etFromText = (EditText) view.findViewById(R.id.etFromDate);
-        etFromText.setEnabled(false);
+        etFromText.setFocusable(false);
         toDateButton = (Button) view.findViewById(R.id.button2);
         etToText = (EditText) view.findViewById(R.id.etToDate);
-        etToText.setEnabled(false);
+        etToText.setFocusable(false);
         checkBox = (CheckBox) view.findViewById(R.id.notification_checkbox);
 
         Context context = getActivity();

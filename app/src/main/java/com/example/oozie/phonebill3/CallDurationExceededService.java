@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Icon;
 import android.provider.CallLog;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
@@ -76,6 +78,7 @@ public class CallDurationExceededService extends IntentService {
             toDate = format.parse(tempToDate);
             Calendar c = Calendar.getInstance();
             c.setTime(toDate);
+            c.setTimeZone(timeZone);
             c.add(Calendar.DATE, 1);
             toDate = c.getTime();
         } catch (ParseException e) {
@@ -127,6 +130,13 @@ public class CallDurationExceededService extends IntentService {
             String callTypeCode = managedCursor.getString(type);
             String strcallDate = managedCursor.getString(date);
             Date callDate = new Date(Long.valueOf(strcallDate));
+
+            Calendar c = Calendar.getInstance();
+            TimeZone timeZone = TimeZone.getTimeZone("Asia/Calcutta");
+            c.setTime(callDate);
+            c.setTimeZone(timeZone);
+            callDate = c.getTime();
+
             String callDuration = managedCursor.getString(duration);
             int callcode = Integer.parseInt(callTypeCode);
 
@@ -151,24 +161,28 @@ public class CallDurationExceededService extends IntentService {
     private void handleNotification() {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.call)
+                        .setSmallIcon(R.drawable.reminder)
                         .setContentTitle("Outgoing Call Duration")
-                        .setContentText(callDurationLimit + "," + outgoingCallDuration);
-                        /*.setContentText(" You have exceeded the outgoing call duration limit of " +
-                                callDurationLimit + "min\n" +
-                                "Total OutgoingCallDuration is " + outgoingCallDuration + "min");*/
-                                //"Outgoing Call Limit Set: ");
+                        .setContentText("You have exceeded the outgoing call duration limit");
+
+
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+        String[] events = new String[3];
+        events[0] = "You have exceeded the outgoing call duration limit";
+        events[1] = "Call duration limit is " + callDurationLimit + "min";
+        events[2] = "Total OutgoingCallDuration is " + outgoingCallDuration + "min";
+        inboxStyle.setBigContentTitle("Details:");
+        for (int i=0; i < events.length; i++) {
+            inboxStyle.addLine(events[i]);
+        }
+        mBuilder.setStyle(inboxStyle);
+
         // Creates an explicit intent for an Activity in your app
         Intent resultIntent = new Intent(this, PhoneBillActivity.class);
 
-        // The stack builder object will contain an artificial back stack for the
-        // started Activity.
-        // This ensures that navigating backward from the Activity leads out of
-        // your application to the Home screen.
+
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        // Adds the back stack for the Intent (but not the Intent itself)
         stackBuilder.addParentStack(PhoneBillActivity.class);
-        // Adds the Intent that starts the Activity to the top of the stack
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(
@@ -180,7 +194,7 @@ public class CallDurationExceededService extends IntentService {
         NotificationManager mNotificationManager =
                 (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // mId allows you to update the notification later on.
+        // NOTIF_ID allows you to update the notification later on.
         mNotificationManager.notify(NOTIF_ID, mBuilder.build());
     }
 }
