@@ -11,21 +11,22 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.TimeZone;
+import java.util.Date;
+import java.util.Locale;
 
 public class GetNotificationFragment extends Fragment {
 
@@ -174,6 +175,19 @@ public class GetNotificationFragment extends Fragment {
         }
         if (tempToDate.isEmpty()) {
             Toast.makeText(getActivity(), "To Date is not set", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        Date tempFrom = new Date();
+        Date tempTo = new Date();
+        DateFormat format = new SimpleDateFormat("d-M-yyyy", Locale.ENGLISH);
+        try {
+            tempFrom = format.parse(tempFromDate);
+            tempTo = format.parse(tempToDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        if (tempFrom.after(tempTo)) {
+            Toast.makeText(getActivity(), "FromDate must be before ToDate", Toast.LENGTH_SHORT).show();
             return false;
         }
         callDuration = tempDuration;

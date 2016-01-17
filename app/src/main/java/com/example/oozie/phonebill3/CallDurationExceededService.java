@@ -88,7 +88,7 @@ public class CallDurationExceededService extends IntentService {
 
         callDurationLimit = Integer.parseInt(tempDuration);
         calculateOutgoingCallDuration(fromDate, toDate);
-        if (outgoingCallDuration >= callDurationLimit) {
+        if (outgoingCallDuration > callDurationLimit) {
             Log.v(TAG, "Outgoing Call Duration Limit Exceeded");
             return true;
         }
@@ -135,7 +135,7 @@ public class CallDurationExceededService extends IntentService {
                 if (callDate.compareTo(fromDate)>=0 && callDate.compareTo(toDate)<0) {
                     count++;
                     int durationInSec = Integer.parseInt(callDuration);
-                    Log.v(TAG, "Outgoing call: " + durationInSec);
+                    //Log.v(TAG, "Outgoing call: " + durationInSec);
                     int durationInMin = (durationInSec%60 == 0) ?
                             durationInSec/60 : durationInSec/60+1;
                     result += durationInMin;
