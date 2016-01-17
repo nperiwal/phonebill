@@ -130,8 +130,9 @@ public class GetNotificationFragment extends Fragment {
                         checkBox.setChecked(false);
                         return;
                     }
-                    start();
                     isGetNotificatonOn = "true";
+                    storeNotificationData();
+                    start();
                     Toast.makeText(getActivity(), "Get Notification Turned ON",
                             Toast.LENGTH_SHORT).show();
 
@@ -144,10 +145,10 @@ public class GetNotificationFragment extends Fragment {
 
                     stop();
                     isGetNotificatonOn = "false";
+                    storeData("isGetNotificatonOn", "false");
                     Toast.makeText(getActivity(), "Get Notification Turned OFF",
                             Toast.LENGTH_SHORT).show();
                 }
-                storeNotificationData();
             }
         });
     }
@@ -193,7 +194,7 @@ public class GetNotificationFragment extends Fragment {
 
         AlarmManager manager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 
-        int interval = 1000 * 60 * 10;
+        int interval = 1000 * 10 * 1;
         long firstMillis = System.currentTimeMillis();
 
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis, interval, pendingIntent);
@@ -253,7 +254,7 @@ public class GetNotificationFragment extends Fragment {
         public void onDateSet(DatePicker view, int selectedYear,
                               int selectedMonth, int selectedDay) {
             StringBuilder builder = new StringBuilder();
-            builder.append(selectedMonth + 1).append("-").append(selectedDay).append("-")
+            builder.append(selectedDay).append("-").append(selectedMonth + 1).append("-")
                     .append(selectedYear);
 
             fromDate = builder.toString();
@@ -271,7 +272,7 @@ public class GetNotificationFragment extends Fragment {
                               int selectedMonth, int selectedDay) {
 
             StringBuilder builder = new StringBuilder();
-            builder.append(selectedMonth + 1).append("-").append(selectedDay).append("-")
+            builder.append(selectedDay).append("-").append(selectedMonth + 1).append("-")
                     .append(selectedYear);
             toDate = builder.toString();
 
